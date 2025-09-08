@@ -11,7 +11,7 @@
 // 7. Copy the generated 'Web app' URL.
 // 8. Paste the URL below to replace the empty string.
 
-const APPS_SCRIPT_URL = ''; // <-- PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqwgllT5UqBonhDAKiqUGF6UlLm1ZGDR1EAzvV5mx0qid2y-eQ6wR3sTX-LpW3xDAO/exec'; // <-- PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
 
 interface FilePayload {
   key: string; // e.g., 'receipt', 'file1'
@@ -44,13 +44,10 @@ const fileToBase64 = (file: File): Promise<string> => {
 // Main function to handle the submission
 export const submitForm = async (payload: SubmissionPayload): Promise<any> => {
   if (!APPS_SCRIPT_URL) {
-    const errorMessage = "Form submission is not configured. Please set the APPS_SCRIPT_URL.";
+    const errorMessage = "Form submission is not configured. Please set the APPS_SCRIPT_URL in services/formSubmissionService.ts";
     console.error(errorMessage);
-    // Simulate a successful submission for demonstration purposes if the URL is not set.
-    // In a real application, you would throw an error here.
-    console.warn("DEMO MODE: Simulating successful form submission.");
-    return Promise.resolve({ status: 'success', message: 'Submission simulated.' });
-    // throw new Error(errorMessage); 
+    // Throw an error to ensure the UI can report the configuration issue.
+    throw new Error(errorMessage); 
   }
 
   // Add a timestamp to the formData payload before sending
@@ -86,10 +83,10 @@ export const submitForm = async (payload: SubmissionPayload): Promise<any> => {
   }
 };
 
-export const processFiles = async (fileList: FileList, keyPrefix: string): Promise<FilePayload[]> => {
+export const processFiles = async (files: File[], keyPrefix: string): Promise<FilePayload[]> => {
   const filePromises: Promise<FilePayload>[] = [];
-  for (let i = 0; i < fileList.length; i++) {
-    const file = fileList[i];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
     if (file) {
       const promise = fileToBase64(file).then(base64Data => ({
         key: `${keyPrefix}${i + 1}`,

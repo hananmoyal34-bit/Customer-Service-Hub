@@ -3,6 +3,7 @@ import FormWrapper from '../../../components/FormWrapper';
 import BackButton from '../../../components/BackButton';
 import { submitForm, processFiles } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
+import MultiUploader from './MultiUploader';
 
 interface ShippingInquiryFormProps {
     onBack: () => void;
@@ -13,6 +14,7 @@ const ShippingInquiryForm: React.FC<ShippingInquiryFormProps> = ({ onBack, onSub
     const [subject, setSubject] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [damagePhotos, setDamagePhotos] = useState<File[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,11 +25,8 @@ const ShippingInquiryForm: React.FC<ShippingInquiryFormProps> = ({ onBack, onSub
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        const imageInput = form.elements.namedItem('damagePhotos') as HTMLInputElement;
-        const imageFiles = imageInput?.files || new FileList();
-
         try {
-            const files = await processFiles(imageFiles, 'file');
+            const files = await processFiles(damagePhotos, 'file');
             
             await submitForm({
                 formType: "Shipping Inquiry",
@@ -72,11 +71,13 @@ const ShippingInquiryForm: React.FC<ShippingInquiryFormProps> = ({ onBack, onSub
                 </div>
 
                 {subject === 'My order arrived damaged' && (
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Upload Photos of the Damage</label>
-                        <input name="damagePhotos" type="file" multiple accept="image/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
-                        <p className="text-xs text-gray-500 mt-1">Please provide photos of the damaged item and the shipping box.</p>
-                    </div>
+                    <MultiUploader 
+                        name="damagePhotos"
+                        label="Upload Photos of the Damage"
+                        onChange={setDamagePhotos}
+                        maxFiles={4}
+                        description="Please provide photos of the damaged item and the shipping box."
+                    />
                 )}
                 
                 <div>

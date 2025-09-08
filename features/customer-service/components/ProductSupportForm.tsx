@@ -5,6 +5,7 @@ import BackButton from '../../../components/BackButton';
 import { submitForm, processFiles } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
 import ProductSelector from './ProductSelector';
+import MultiUploader from './MultiUploader';
 
 
 interface ProductSupportFormProps {
@@ -20,6 +21,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
     const [error, setError] = useState<string | null>(null);
     const [product, setProduct] = useState('');
     const [isOtherProduct, setIsOtherProduct] = useState(false);
+    const [damagePhotos, setDamagePhotos] = useState<File[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,11 +32,8 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        const imageInput = form.elements.namedItem('damagePhotos') as HTMLInputElement;
-        const imageFiles = imageInput?.files || new FileList();
-
         try {
-            const files = await processFiles(imageFiles, 'file');
+            const files = await processFiles(damagePhotos, 'file');
             
             await submitForm({
                 formType: "Product Support",
@@ -136,11 +135,13 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                         </div>
                     </div>
                      <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail.</label><textarea name="issueDescription" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Upload Photos of the Damage</label>
-                        <input name="damagePhotos" type="file" multiple accept="image/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
-                        <p className="text-xs text-gray-500 mt-1">Please upload up to 4 clear photos showing the issue.</p>
-                    </div>
+                    <MultiUploader 
+                        name="damagePhotos"
+                        label="Upload Photos of the Damage"
+                        onChange={setDamagePhotos}
+                        maxFiles={4}
+                        description="Please upload up to 4 clear photos showing the issue."
+                    />
                 </fieldset>
 
                 <div className="bg-gray-100 p-4 rounded-md text-sm text-gray-600 border border-gray-200">
