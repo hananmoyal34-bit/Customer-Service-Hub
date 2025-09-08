@@ -1,0 +1,5 @@
+{
+  "name": "Customer Service Hub",
+  "description": "An intelligent customer service portal that uses AI to understand user queries and direct them to the appropriate support channel. It features dedicated forms for product support, warranty registration, sales, and more.",
+  "requestFramePermissions": []
+}
