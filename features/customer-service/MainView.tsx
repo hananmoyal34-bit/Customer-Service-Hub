@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { View } from '../../types';
 import ServiceCard from '../../components/ServiceCard';
@@ -67,8 +66,6 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
                     </button>
                 </form>
                 {searchError && <p className="text-center text-red-600 mt-2">{searchError}</p>}
-                {!process.env.API_KEY && <p className="text-center text-orange-600 mt-2 text-sm">AI assistant is disabled. API key not configured.</p>}
-
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">

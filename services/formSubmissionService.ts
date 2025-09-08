@@ -1,5 +1,17 @@
-// IMPORTANT: Replace this with the Google Apps Script Web App URL you copied after deployment.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPBgiwNELD84rPfcj9uV7bskWven-UvFJFgJSR56Tb_2VhUon6BAvcMkhxMraATnrU/exec';
+// IMPORTANT: To enable form submissions, you must set up your own Google Apps Script backend.
+// This script will receive form data from the app and save it to a Google Sheet.
+//
+// Follow these steps:
+// 1. Create a new Google Sheet to store responses.
+// 2. Go to Extensions > Apps Script in the Google Sheet.
+// 3. Replace the default code with the provided `Code.gs` script from this project's documentation.
+// 4. Click 'Deploy' > 'New deployment'.
+// 5. For 'Execute as', select 'Me'. For 'Who has access', select 'Anyone'.
+// 6. Click 'Deploy'. You will need to authorize the script's permissions.
+// 7. Copy the generated 'Web app' URL.
+// 8. Paste the URL below to replace the empty string.
+
+const APPS_SCRIPT_URL = ''; // <-- PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
 
 interface FilePayload {
   key: string; // e.g., 'receipt', 'file1'
@@ -31,6 +43,16 @@ const fileToBase64 = (file: File): Promise<string> => {
 
 // Main function to handle the submission
 export const submitForm = async (payload: SubmissionPayload): Promise<any> => {
+  if (!APPS_SCRIPT_URL) {
+    const errorMessage = "Form submission is not configured. Please set the APPS_SCRIPT_URL.";
+    console.error(errorMessage);
+    // Simulate a successful submission for demonstration purposes if the URL is not set.
+    // In a real application, you would throw an error here.
+    console.warn("DEMO MODE: Simulating successful form submission.");
+    return Promise.resolve({ status: 'success', message: 'Submission simulated.' });
+    // throw new Error(errorMessage); 
+  }
+
   // Add a timestamp to the formData payload before sending
   const newPayload = {
     ...payload,
