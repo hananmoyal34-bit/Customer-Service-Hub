@@ -20,7 +20,6 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [product, setProduct] = useState('');
-    const [isOtherProduct, setIsOtherProduct] = useState(false);
     const [damagePhotos, setDamagePhotos] = useState<File[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -100,39 +99,13 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                     <legend className="text-lg font-semibold text-gray-700 mb-2">Part 3: Issue Details</legend>
                      <div>
                         <label className="block text-sm font-medium text-gray-700">Which product are you having an issue with?</label>
-                        { isOtherProduct ? (
-                            <input
-                                name="product"
-                                type="text"
-                                value={product}
-                                onChange={e => setProduct(e.target.value)}
-                                required
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                                placeholder="Please specify your product"
-                            />
-                        ) : (
-                            <ProductSelector
-                                products={products}
-                                name="product"
-                                value={product}
-                                onChange={setProduct}
-                                required
-                            />
-                        )}
-                        <div className="mt-2">
-                            <label className="inline-flex items-center">
-                                <input
-                                    type="checkbox"
-                                    checked={isOtherProduct}
-                                    onChange={(e) => {
-                                        setIsOtherProduct(e.target.checked);
-                                        setProduct(''); // Clear selection on toggle
-                                    }}
-                                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                />
-                                <span className="ml-2 text-sm text-gray-600">My product is not on the list</span>
-                            </label>
-                        </div>
+                        <ProductSelector
+                            products={products}
+                            name="product"
+                            value={product}
+                            onChange={setProduct}
+                            required
+                        />
                     </div>
                      <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail.</label><textarea name="issueDescription" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
                     <MultiUploader 
