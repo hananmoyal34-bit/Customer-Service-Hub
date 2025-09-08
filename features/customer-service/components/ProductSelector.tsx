@@ -114,6 +114,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                                                     className="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-100 rounded-md"
                                                     role="option"
                                                     aria-selected={value === product.productName}
+                                                    title={product.productName}
                                                 >
                                                     <span className="font-normal block truncate">{product.productName}</span>
                                                 </li>
