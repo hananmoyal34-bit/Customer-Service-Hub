@@ -50,13 +50,25 @@ export const submitForm = async (payload: SubmissionPayload): Promise<any> => {
     throw new Error(errorMessage); 
   }
 
-  // Add a timestamp to the formData payload before sending
-  const newPayload = {
-    ...payload,
+  // The backend script is designed to parse a 'fullName' field.
+  // We will construct it from the separate 'firstName' and 'lastName' fields provided by the forms
+  // to ensure compatibility with the existing backend logic.
+  const formDataWithFullName = { ...payload.formData };
+  if (formDataWithFullName.firstName && formDataWithFullName.lastName) {
+    formDataWithFullName.fullName = `${formDataWithFullName.firstName} ${formDataWithFullName.lastName}`.trim();
+  }
+
+  // The backend script expects a top-level `formType` of 'create' or 'update' for routing.
+  // The specific type of form (e.g., "Warranty Registration") is passed inside the formData
+  // object, which the backend then uses for the "Ticket Category" column.
+  const submissionPacket = {
+    formType: 'create', // Hardcode to 'create' for all new submissions.
     formData: {
-      ...payload.formData,
+      ...formDataWithFullName, // Use the formData that now includes 'fullName'
+      formType: payload.formType, // Move the specific form type (e.g., "Product Support") here.
       Timestamp: new Date().toLocaleString(),
-    }
+    },
+    files: payload.files,
   };
 
   try {
@@ -66,7 +78,7 @@ export const submitForm = async (payload: SubmissionPayload): Promise<any> => {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8', // Apps Script web apps expect text/plain for postData
       },
-      body: JSON.stringify(newPayload),
+      body: JSON.stringify(submissionPacket),
     });
 
     const result = await response.json();

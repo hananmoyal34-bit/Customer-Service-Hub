@@ -1,3 +1,4 @@
+
 // This is a new Netlify serverless function to fetch product data from the Google Sheet.
 // It calls the same Google Apps Script as the form submission service but with a different action.
 // The file should be placed at `netlify/functions/get-products.js`.
@@ -22,38 +23,26 @@ export default async (req, context) => {
             throw new Error("Failed to fetch from Google Apps Script.");
         }
         
-        const data = await response.json();
+        const result = await response.json();
 
-        // Expects a 2D array from Google Sheets. First row is headers.
-        if (!Array.isArray(data) || data.length < 2) {
-             console.warn("No product data received from the spreadsheet or sheet is empty.");
+        // The Google Apps Script for products returns a structured object.
+        // We check for the expected structure from the Apps Script.
+        if (result.status !== 'success' || !Array.isArray(result.data)) {
+             console.warn("No product data received from the backend or data is in an invalid format.", result);
              return new Response(JSON.stringify([]), {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        const headers = data[0].map(h => h.toString().trim().toLowerCase());
-        const itemIndex = headers.indexOf('items');
-        const colorsIndex = headers.indexOf('colors');
-        const categoryIndex = headers.indexOf('category');
-        const subCategoryIndex = headers.indexOf('sub-category');
-
-        if (itemIndex === -1 || categoryIndex === -1 || subCategoryIndex === -1) {
-            const errorMessage = `Missing required columns in 'Products' sheet. Expected 'Items', 'Category', 'Sub-Category', but got: ${headers.join(', ')}`;
-            console.error(errorMessage);
-            return new Response(JSON.stringify({ error: "Invalid data structure from source. " + errorMessage}), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-
-        const products = data.slice(1).map((row, index) => ({
+        // The data from the backend is already in the { Item, Color, Category, SubCategory } format.
+        // We just need to map it to our frontend's Product type.
+        const products = result.data.map((rawProduct, index) => ({
             productID: `p${String(index + 1).padStart(3, '0')}`,
-            productName: row[itemIndex] || '',
-            colors: row[colorsIndex] || '',
-            category: row[categoryIndex] || '',
-            subCategory: row[subCategoryIndex] || '',
-        })).filter(p => p.productName && p.category && p.subCategory); // Filter out any invalid rows
+            productName: rawProduct.Item || '',
+            colors: rawProduct.Color || '',
+            category: rawProduct.Category || '',
+            subCategory: rawProduct.SubCategory || 'General', // Default to 'General'
+        })).filter(p => p.productName && p.category); // Filter out any invalid rows (must have name and category)
 
         return new Response(JSON.stringify(products), {
             headers: { 'Content-Type': 'application/json' }

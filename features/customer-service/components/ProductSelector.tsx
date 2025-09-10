@@ -1,13 +1,15 @@
+
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Product } from '../../../types';
 import { SearchIcon } from '../../../components/icons/SearchIcon';
 
 interface ProductSelectorProps {
     products: Product[];
-    value: string;
-    onChange: (value: string) => void;
+    value: string | string[];
+    onChange: (value: string | string[]) => void;
     name: string;
     required?: boolean;
+    multiple?: boolean;
 }
 
 const ChevronIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -16,18 +18,28 @@ const ChevronIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
+const CheckboxIcon: React.FC<{ checked: boolean }> = ({ checked }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        {checked ? (
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        ) : (
+            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.99 2.001a7.999 7.999 0 110 15.998A7.999 7.999 0 019.99 2z" />
+        )}
+    </svg>
+);
 
-const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onChange, name, required }) => {
+
+const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onChange, name, required, multiple = false }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedState, setExpandedState] = useState<Record<string, boolean>>({});
 
     const isProductInList = useMemo(() => {
-        if (!value) return false;
+        if (!value || Array.isArray(value)) return false;
         return products.some(p => p.productName === value);
     }, [products, value]);
     
-    const [isOtherActive, setIsOtherActive] = useState(!!value && !isProductInList);
+    const [isOtherActive, setIsOtherActive] = useState(!multiple && !!value && !isProductInList);
     
     const modalRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -35,8 +47,10 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
     const openButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        setIsOtherActive(!!value && !isProductInList);
-    }, [value, isProductInList]);
+        if (!multiple) {
+            setIsOtherActive(!!value && !isProductInList);
+        }
+    }, [value, isProductInList, multiple]);
 
     // Focus management for modal
     useEffect(() => {
@@ -89,14 +103,33 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
     
     const handleSelect = (productName: string) => {
         if (productName === '__OTHER__') {
+            if (multiple) return; // 'Other' is not supported in multi-select mode
             setIsOtherActive(true);
             onChange('');
+            setIsModalOpen(false);
+            setSearchTerm('');
         } else {
-            setIsOtherActive(false);
-            onChange(productName);
+            if (multiple) {
+                const currentSelection = Array.isArray(value) ? value : [];
+                const isSelected = currentSelection.includes(productName);
+                const newSelection = isSelected 
+                    ? currentSelection.filter(p => p !== productName)
+                    : [...currentSelection, productName];
+                onChange(newSelection);
+            } else {
+                setIsOtherActive(false);
+                onChange(productName);
+                setIsModalOpen(false);
+                setSearchTerm('');
+            }
         }
-        setIsModalOpen(false);
-        setSearchTerm('');
+    };
+
+    const isSelected = (productName: string): boolean => {
+        if (multiple) {
+            return Array.isArray(value) && value.includes(productName);
+        }
+        return !Array.isArray(value) && value === productName;
     };
 
     const toggleExpand = (key: string) => {
@@ -131,11 +164,19 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
         }, {} as Record<string, Record<string, Product[]>>);
     }, [products, searchTerm]);
 
-    const displayValue = value || "Select a product...";
+    const displayValue = useMemo(() => {
+        if (multiple) {
+            if (!Array.isArray(value) || value.length === 0) return "Select one or more products...";
+            if (value.length === 1) return value[0];
+            return `${value.length} products selected`;
+        }
+        return value || "Select a product...";
+    }, [value, multiple]);
+
 
     return (
         <div className="relative">
-            {!isOtherActive && <input type="hidden" name={name} value={value} required={required} />}
+            {!isOtherActive && <input type="hidden" name={name} value={multiple && Array.isArray(value) ? value.join(', ') : (value || '')} required={required} />}
             <button
                 ref={openButtonRef}
                 type="button"
@@ -143,7 +184,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-white text-left focus:ring-indigo-500 focus:border-indigo-500"
                 aria-haspopup="dialog"
             >
-                 <span className={`block truncate ${value && !isOtherActive ? 'text-gray-900' : 'text-gray-500'}`}>
+                 <span className={`block truncate ${((Array.isArray(value) ? value.length > 0 : !!value)) && !isOtherActive ? 'text-gray-900' : 'text-gray-500'}`}>
                     {isOtherActive ? 'Other product specified below' : displayValue}
                 </span>
                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -153,7 +194,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                  </span>
             </button>
 
-            {isOtherActive && (
+            {isOtherActive && !multiple && (
                 <div className="mt-2">
                     <label htmlFor={`${name}-other-input`} className="block text-sm font-medium text-gray-700">Please specify your product</label>
                     <input
@@ -161,7 +202,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                         ref={otherInputRef}
                         name={name}
                         type="text"
-                        value={value}
+                        value={String(value)}
                         onChange={(e) => onChange(e.target.value)}
                         required={required}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -238,12 +279,17 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                                                                 <li
                                                                     key={product.productID}
                                                                     onClick={() => handleSelect(product.productName)}
-                                                                    className={`text-gray-800 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-100 rounded-md my-1 ${value === product.productName ? 'bg-indigo-100 font-semibold' : ''}`}
+                                                                    className={`text-gray-800 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-100 rounded-md my-1 ${isSelected(product.productName) ? 'bg-indigo-100 font-semibold' : ''}`}
                                                                     role="option"
-                                                                    aria-selected={value === product.productName}
+                                                                    aria-selected={isSelected(product.productName)}
                                                                 >
-                                                                    <span className="block truncate">{product.productName}</span>
-                                                                    {value === product.productName && (
+                                                                    {multiple && (
+                                                                        <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${isSelected(product.productName) ? 'text-indigo-600' : 'text-gray-400'}`}>
+                                                                            <CheckboxIcon checked={isSelected(product.productName)} />
+                                                                        </span>
+                                                                    )}
+                                                                    <span className={`block truncate ${multiple ? 'ml-8' : ''}`}>{product.productName}</span>
+                                                                    {!multiple && isSelected(product.productName) && (
                                                                         <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -265,17 +311,25 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ products, value, onCh
                             </ul>
                         </div>
 
-                        {/* Footer / Other option */}
-                         <div className="p-4 border-t">
-                             <button 
-                                type="button" 
-                                onClick={() => handleSelect('__OTHER__')} 
-                                className="w-full text-left text-gray-800 cursor-pointer select-none py-3 px-4 hover:bg-gray-100 rounded-md font-semibold"
-                                role="option"
-                            >
-                                My product is not on this list
-                            </button>
-                        </div>
+                        {/* Footer */}
+                         {multiple ? (
+                             <div className="p-4 border-t">
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Done
+                                </button>
+                            </div>
+                        ) : (
+                             <div className="p-4 border-t">
+                                 <button 
+                                    type="button" 
+                                    onClick={() => handleSelect('__OTHER__')} 
+                                    className="w-full text-left text-gray-800 cursor-pointer select-none py-3 px-4 hover:bg-gray-100 rounded-md font-semibold"
+                                    role="option"
+                                >
+                                    My product is not on this list
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
