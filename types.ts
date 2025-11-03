@@ -8,4 +8,4 @@ export interface Product {
 
 export type View = 'main' | 'productSupport' | 'salesInquiry' | 'warrantyRegistration' | 'general' | 'requestCallback' | 'shippingInquiry';
 
-export type ProductSupportSubView = 'select' | 'form';
+export type ProductSupportSubView = 'select' | 'damageCategorySelect' | 'damageReasonSelect' | 'form' | 'upgrade';

@@ -69,7 +69,7 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                <ServiceCard title="Product Support & Warranty" description="For issues with a damaged product or to file a warranty claim." onClick={() => setView('productSupport')} />
+                <ServiceCard title="Product Support" description="For issues with a damaged product or to file a warranty claim." onClick={() => setView('productSupport')} />
                 <ServiceCard title="Shipping & Order Inquiries" description="Track your order, report a shipping issue, or ask about delivery." onClick={() => setView('shippingInquiry')} />
                 <ServiceCard title="Request a Callback" description="Leave your number and we'll call you back as soon as possible." onClick={() => setView('requestCallback')} />
                 <ServiceCard title="Purchase More Products" description="Contact our sales team to place new orders or inquire about bulk purchases." onClick={() => setView('salesInquiry')} />
