@@ -71,17 +71,17 @@ const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ pro
                     
                     <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">Your Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div><label className="block text-sm font-medium text-gray-700">First Name</label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Last Name</label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address</label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
                     </div>
 
                     <h3 className="text-lg font-semibold text-gray-700 border-b pb-2">Purchase & Product Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Store Name</label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Date of Purchase</label><input name="purchaseDate" type="date" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" max={today} /></div>
+                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" max={today} /></div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Product(s) Purchased</label>
+                            <label className="block text-sm font-medium text-gray-700">Product(s) Purchased <span className="text-red-500">*</span></label>
                             <ProductSelector 
                                 products={products}
                                 name="product"
@@ -92,8 +92,8 @@ const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ pro
                             />
                         </div>
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700">Order / Invoice Number</label>
-                            <input name="invoiceNumber" type="text" required={!showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
+                            <label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label>
+                            <input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm disabled:bg-gray-100" />
                         </div>
                         <div className="md:col-span-2">
                             <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline">Don't have your invoice number?</button>
@@ -101,8 +101,8 @@ const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ pro
 
                         {showNoInvoice && (
                             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50">
-                                <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card</label><input name="last4Digits" type="text" pattern="\d{4}" title="Four digits" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($)</label><input name="purchaseAmount" type="number" step="0.01" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
                             </div>
                         )}
 

@@ -19,6 +19,23 @@ const formatLabel = (key: string) => {
 const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onConfirm, title, data, files, isSubmitting }) => {
     if (!isOpen) return null;
 
+    const formatValue = (key: string, value: any): string => {
+        if (key === 'purchaseAmount') {
+            const amount = parseFloat(String(value));
+            if (!isNaN(amount)) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                }).format(amount);
+            }
+        }
+        // Prettify checkbox values which are submitted as 'on'
+        if (String(value) === 'on') {
+            return 'Agreed';
+        }
+        return String(value);
+    };
+
     // Filter out empty values and internal keys for file inputs, which are handled separately
     const displayData = Object.entries(data).filter(([key, value]) => {
         return value && !key.startsWith('receiptUpload') && !key.startsWith('damagePhotos');
@@ -44,7 +61,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onConfirm, t
                         {displayData.map(([key, value]) => (
                             <div key={key} className="py-3 px-4 grid grid-cols-3 gap-4">
                                 <dt className="text-sm font-medium text-gray-600">{formatLabel(key)}</dt>
-                                <dd className="text-sm text-gray-900 col-span-2 break-words">{String(value)}</dd>
+                                <dd className="text-sm text-gray-900 col-span-2 break-words">{formatValue(key, value)}</dd>
                             </div>
                         ))}
                          {files && files.length > 0 && (

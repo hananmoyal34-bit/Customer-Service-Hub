@@ -57,37 +57,37 @@ const RequestCallbackForm: React.FC<RequestCallbackFormProps> = ({ onBack, onSub
                 <form onSubmit={handleReview} className="space-y-6">
                     {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">{error}</div>}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div><label className="block text-sm font-medium text-gray-700">First Name</label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Last Name</label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Phone Number</label><input name="phoneNumber" type="tel" required placeholder="(555) 555-5555" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Store Name</label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Phone Number <span className="text-red-500">*</span></label><input name="phoneNumber" type="tel" required placeholder="(555) 555-5555" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
                     </div>
                     
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Invoice Number</label>
-                        <input name="invoiceNumber" type="text" required={!showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
+                        <label className="block text-sm font-medium text-gray-700">Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label>
+                        <input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm disabled:bg-gray-100" />
                     </div>
 
                     <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline">Don't have your invoice number?</button>
 
                     {showNoInvoice && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50">
-                            <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card</label><input name="last4Digits" type="text" pattern="\d{4}" title="Four digits" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($)</label><input name="purchaseAmount" type="number" step="0.01" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Date of Purchase</label><input name="purchaseDate" type="date" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Store of Purchase</label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Store of Purchase <span className="text-red-500">*</span></label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
                         </div>
                     )}
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Best Time to Call</label>
+                        <label className="block text-sm font-medium text-gray-700">Best Time to Call <span className="text-red-500">*</span></label>
                         <select name="bestTimeToCall" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-white">
                             <option>Anytime</option>
                             <option>Morning (9am - 12pm)</option>
                             <option>Afternoon (12pm - 5pm)</option>
                         </select>
                     </div>
-                    <div><label className="block text-sm font-medium text-gray-700">Reason for Call (Ticket Notes)</label><textarea name="ticketNotes" required rows={4} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
+                    <div><label className="block text-sm font-medium text-gray-700">Reason for Call (Ticket Notes) <span className="text-red-500">*</span></label><textarea name="ticketNotes" required rows={4} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
                     <button type="submit" disabled={isSubmitting} className="w-full flex justify-center bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 disabled:bg-indigo-400">
                         {isSubmitting ? <SpinnerIcon /> : 'Review & Submit Request'}
                     </button>

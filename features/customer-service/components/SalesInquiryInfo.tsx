@@ -15,7 +15,6 @@ const SalesInquiryInfo: React.FC<SalesInquiryInfoProps> = ({ onBack }) => (
             <div className="mt-6 p-4 border rounded-lg bg-gray-50">
                 <h3 className="text-lg font-semibold text-gray-800">Sales Department Contact</h3>
                 <p className="mt-2"><strong>Email:</strong> <a href="mailto:info@retailtechcare.com" className="text-indigo-600 underline">info@retailtechcare.com</a></p>
-                <p><strong>Phone:</strong> <a href="tel:7026042933" className="text-indigo-600 underline">702-604-2933</a></p>
             </div>
             <div className="mt-4">
                 <p className="font-semibold">Business Hours:</p>

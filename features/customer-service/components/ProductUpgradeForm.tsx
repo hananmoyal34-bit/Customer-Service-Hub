@@ -67,15 +67,15 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                     
                     <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <legend className="text-lg font-semibold text-gray-700 mb-2 col-span-full">Your Information</legend>
-                        <div><label className="block text-sm font-medium text-gray-700">First Name</label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Last Name</label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address</label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
                     </fieldset>
                     
                     <fieldset className="space-y-4">
                         <legend className="text-lg font-semibold text-gray-700 mb-2">Current Product & Purchase Details</legend>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Which charging case do you currently own?</label>
+                            <label className="block text-sm font-medium text-gray-700">Which charging case do you currently own? <span className="text-red-500">*</span></label>
                             <ProductSelector
                                 products={chargingCaseProducts}
                                 name="currentProduct"
@@ -84,15 +84,15 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                                 required
                             />
                         </div>
-                        <div><label className="block text-sm font-medium text-gray-700">Store Name</label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
-                        <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number</label><input name="invoiceNumber" type="text" required={!showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label><input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm disabled:bg-gray-100" /></div>
                         <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline">Don't have your invoice number?</button>
                         {showNoInvoice && (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50">
-                                <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card</label><input name="last4Digits" type="text" pattern="\d{4}" title="Four digits" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($)</label><input name="purchaseAmount" type="number" step="0.01" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                <div><label className="block text-sm font-medium text-gray-700">Date of Purchase</label><input name="purchaseDate" type="date" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
-                                <div><label className="block text-sm font-medium text-gray-700">Store of Purchase</label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
+                                <div><label className="block text-sm font-medium text-gray-700">Store of Purchase <span className="text-red-500">*</span></label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
                             </div>
                         )}
                     </fieldset>
@@ -100,7 +100,7 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                     <fieldset className="space-y-4">
                         <legend className="text-lg font-semibold text-gray-700 mb-2">Upgrade Details</legend>
                          <div>
-                            <label className="block text-sm font-medium text-gray-700">Your New Phone Model</label>
+                            <label className="block text-sm font-medium text-gray-700">Your New Phone Model <span className="text-red-500">*</span></label>
                             <input name="newPhoneModel" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="e.g., iPhone 16 Pro Max"/>
                         </div>
                         <div><label className="block text-sm font-medium text-gray-700">Reason for upgrade or any questions (Ticket Notes)</label><textarea name="ticketNotes" rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
@@ -138,7 +138,7 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                         </div>
                         <div className="ml-3 text-sm">
                             <label htmlFor="upgrade-agreement" className="font-medium text-gray-700">
-                                I have read and agree to the upgrade process and the associated fee of $27.08.
+                                I have read and agree to the upgrade process and the associated fee of $27.08. <span className="text-red-500">*</span>
                             </label>
                         </div>
                     </div>

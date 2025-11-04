@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Product, ProductSupportSubView } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
@@ -124,8 +125,8 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                         <p className="text-sm text-gray-600">Proceed to file a report for a defective or damaged item.</p>
                      </button>
                      <button type="button" onClick={() => setSubView('upgrade')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <p className="font-semibold text-gray-800">I want to upgrade my product.</p>
-                        <p className="text-sm text-gray-600">Request information about upgrading to a newer model.</p>
+                        <p className="font-semibold text-gray-800">I want to upgrade my Charging Case.</p>
+                        <p className="text-sm text-gray-600">Request information about upgrading your charging case to a newer model.</p>
                      </button>
                       <button type="button" onClick={onBack} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <p className="font-semibold text-gray-800">I need help with something else related to my product.</p>
@@ -169,9 +170,6 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                     <div className="p-5 border-2 border-gray-200 rounded-lg hover:border-indigo-400 transition-colors">
                         <h3 className="font-bold text-lg text-gray-900">Broken</h3>
                         <p className="text-gray-700 mt-1">{details.Broken}</p>
-                        <p className="mt-4 text-sm text-orange-800 bg-orange-100 p-3 rounded-md border border-orange-200">
-                            <strong>Please note:</strong> Broken products fall under external factors, so you may be responsible for covering the replacement cost.
-                        </p>
                         <button type="button" onClick={() => { setDamageReason('Broken'); setSubView('form'); }} className="mt-4 bg-indigo-600 text-white font-semibold py-2 px-5 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             This sounds right
                         </button>
@@ -208,22 +206,22 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                         {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">{error}</div>}
                         <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <legend className="text-lg font-semibold text-gray-700 mb-2 col-span-full">Part 1: Your Information</legend>
-                            <div><label className="block text-sm font-medium text-gray-700">First Name</label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Last Name</label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address</label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
                         </fieldset>
                         
                         <fieldset className="space-y-4">
                             <legend className="text-lg font-semibold text-gray-700 mb-2">Part 2: Purchase Details</legend>
-                            <div><label className="block text-sm font-medium text-gray-700">Store Name</label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number</label><input name="invoiceNumber" type="text" required={!showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label><input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100" /></div>
                             <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline">Don't have your invoice number?</button>
                             {showNoInvoice && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50">
-                                    <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card</label><input name="last4Digits" type="text" pattern="\d{4}" title="Four digits" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($)</label><input name="purchaseAmount" type="number" step="0.01" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Date of Purchase</label><input name="purchaseDate" type="date" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Store of Purchase</label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700">Store of Purchase <span className="text-red-500">*</span></label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
                                 </div>
                             )}
                         </fieldset>
@@ -243,7 +241,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                                 </div>
                             )}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">{productSelectorLabel}</label>
+                                <label className="block text-sm font-medium text-gray-700">{productSelectorLabel} <span className="text-red-500">*</span></label>
                                 <ProductSelector
                                     products={filteredProducts}
                                     name="product"
@@ -252,7 +250,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                                     required
                                 />
                             </div>
-                            <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail (Ticket Notes)</label><textarea name="ticketNotes" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail (Ticket Notes) <span className="text-red-500">*</span></label><textarea name="ticketNotes" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
                             <MultiUploader 
                                 name="damagePhotos"
                                 label="Upload Photos of the Damage"
