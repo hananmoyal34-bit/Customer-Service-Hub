@@ -1,6 +1,6 @@
-// This is a new Netlify serverless function to fetch product data from the Google Sheet.
-// It calls the same Google Apps Script as the form submission service but with a different action.
-// The file should be placed at `netlify/functions/get-products.js`.
+// This Netlify serverless function fetches product data from the Google Sheet.
+// It calls the Google Apps Script, which is now expected to return a direct
+// array of product objects.
 
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqwgllT5UqBonhDAKiqUGF6UlLm1ZGDR1EAzvV5mx0qid2y-eQ6wR3sTX-LpW3xDAO/exec'; // This should be the same URL as in formSubmissionService.ts
 
@@ -24,25 +24,35 @@ export default async (req, context) => {
         
         const result = await response.json();
 
-        // The Google Apps Script for products returns a structured object.
-        // We check for the expected structure from the Apps Script.
+        // The updated script returns a direct array of objects in the `data` property.
         if (result.status !== 'success' || !Array.isArray(result.data)) {
-             console.warn("No product data received from the backend or data is in an invalid format.", result);
-             return new Response(JSON.stringify([]), {
-                headers: { 'Content-Type': 'application/json' }
-            });
+             console.error("Invalid data structure from Google Apps Script. Expected { data: [...] }", result);
+             // Return empty array to prevent frontend from crashing
+             return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
         }
 
-        // The data from the backend is already in the { Item, Color, Category, SubCategory } format.
-        // We just need to map it to our frontend's Product type.
-        const products = result.data.map((rawProduct, index) => ({
-            productID: `p${String(index + 1).padStart(3, '0')}`,
-            productName: rawProduct.Item || '',
-            colors: rawProduct.Color || '',
-            category: rawProduct.Category || '',
-            subCategory: rawProduct.SubCategory || 'General', // Default to 'General'
-            lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
-        })).filter(p => p.productName && p.category); // Filter out any invalid rows (must have name and category)
+        const rawProducts = result.data;
+
+        const products = rawProducts.map((rawProduct, index) => {
+            // Map the properties from the Google Sheet column names to the application's Product type.
+            // Example mapping: 'Items' -> 'productName', 'Sub-Category' -> 'subCategory'
+            const productName = rawProduct.Items || '';
+            const category = rawProduct.Category || '';
+
+            // Skip any rows that are missing essential data.
+            if (!productName || !category) {
+                return null;
+            }
+
+            return {
+                productID: `p${String(index + 1).padStart(3, '0')}`,
+                productName: productName,
+                colors: rawProduct.Colors || '',
+                category: category,
+                subCategory: rawProduct['Sub-Category'] || 'General',
+                lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
+            };
+        }).filter(p => p !== null); // Filter out any invalid rows
 
         return new Response(JSON.stringify(products), {
             headers: { 'Content-Type': 'application/json' }
