@@ -1,4 +1,3 @@
-
 import { Product } from '../types';
 
 // This URL points to the Google Apps Script that retrieves product data from the spreadsheet.
@@ -12,6 +11,7 @@ interface RawProductFromAPI {
   Color: string;
   Category: string;
   SubCategory: string;
+  'Low Stock Threshold': number | string;
 }
 
 export const getProducts = async (): Promise<Product[]> => {
@@ -51,6 +51,7 @@ export const getProducts = async (): Promise<Product[]> => {
                     category: rawProduct.Category,
                     // Default to 'General' if SubCategory is missing or empty.
                     subCategory: rawProduct.SubCategory || 'General',
+                    lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
                 };
             })
             .filter((p): p is Product => p !== null); // Filter out any null entries that resulted from malformed data.

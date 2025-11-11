@@ -1,4 +1,3 @@
-
 // This is a new Netlify serverless function to fetch product data from the Google Sheet.
 // It calls the same Google Apps Script as the form submission service but with a different action.
 // The file should be placed at `netlify/functions/get-products.js`.
@@ -42,6 +41,7 @@ export default async (req, context) => {
             colors: rawProduct.Color || '',
             category: rawProduct.Category || '',
             subCategory: rawProduct.SubCategory || 'General', // Default to 'General'
+            lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
         })).filter(p => p.productName && p.category); // Filter out any invalid rows (must have name and category)
 
         return new Response(JSON.stringify(products), {
