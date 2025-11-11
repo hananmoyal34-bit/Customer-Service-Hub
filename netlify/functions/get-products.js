@@ -24,49 +24,25 @@ export default async (req, context) => {
         
         const result = await response.json();
 
-        // The original script returns a structured object { headers: [], rows: [] }.
-        // We need to parse this into an array of product objects.
-        if (result.status !== 'success' || !result.data || !Array.isArray(result.data.headers) || !Array.isArray(result.data.rows)) {
-             console.error("Invalid data structure from Google Apps Script. Expected { data: { headers: [...], rows: [...] } }", result);
-             // Return empty array to prevent frontend from crashing
-             return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
+        // The Google Apps Script for products returns a structured object.
+        // We check for the expected structure from the Apps Script.
+        if (result.status !== 'success' || !Array.isArray(result.data)) {
+             console.warn("No product data received from the backend or data is in an invalid format.", result);
+             return new Response(JSON.stringify([]), {
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
-        const { headers, rows } = result.data;
-
-        // Find the index of each column. This makes the mapping robust to column reordering.
-        const headerMap = {
-            items: headers.indexOf('Items'),
-            colors: headers.indexOf('Colors'),
-            category: headers.indexOf('Category'),
-            subCategory: headers.indexOf('Sub-Category'),
-            lowStock: headers.indexOf('Low Stock Threshold')
-        };
-
-        // Check if essential headers are present
-        if (headerMap.items === -1 || headerMap.category === -1) {
-            console.error("Essential columns 'Items' or 'Category' not found in Products sheet.", headers);
-            return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
-        }
-
-        const products = rows.map((row, index) => {
-            const productName = row[headerMap.items] || '';
-            const category = row[headerMap.category] || '';
-
-            // Only create a product object if it has the minimum required data
-            if (!productName || !category) {
-                return null;
-            }
-
-            return {
-                productID: `p${String(index + 1).padStart(3, '0')}`,
-                productName: productName,
-                colors: headerMap.colors > -1 ? row[headerMap.colors] || '' : '',
-                category: category,
-                subCategory: headerMap.subCategory > -1 ? row[headerMap.subCategory] || 'General' : 'General',
-                lowStockThreshold: headerMap.lowStock > -1 ? Number(row[headerMap.lowStock]) || 0 : 0,
-            };
-        }).filter(p => p !== null); // Filter out any null entries from invalid rows
+        // The data from the backend is in the { Items, Colors, Category, 'Sub-Category' } format.
+        // We just need to map it to our frontend's Product type.
+        const products = result.data.map((rawProduct, index) => ({
+            productID: `p${String(index + 1).padStart(3, '0')}`,
+            productName: rawProduct.Items || '',
+            colors: rawProduct.Colors || '',
+            category: rawProduct.Category || '',
+            subCategory: rawProduct['Sub-Category'] || 'General', // Default to 'General'
+            lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
+        })).filter(p => p.productName && p.category); // Filter out any invalid rows (must have name and category)
 
         return new Response(JSON.stringify(products), {
             headers: { 'Content-Type': 'application/json' }
