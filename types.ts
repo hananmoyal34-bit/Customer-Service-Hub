@@ -4,7 +4,6 @@ export interface Product {
   colors: string;
   category: string;
   subCategory: string;
-  lowStockThreshold: number;
 }
 
 export type View = 'main' | 'productSupport' | 'salesInquiry' | 'warrantyRegistration' | 'general' | 'requestCallback' | 'shippingInquiry';

@@ -1,3 +1,4 @@
+
 // This is a new Netlify serverless function to fetch product data from the Google Sheet.
 // It calls the same Google Apps Script as the form submission service but with a different action.
 // The file should be placed at `netlify/functions/get-products.js`.
@@ -33,15 +34,14 @@ export default async (req, context) => {
             });
         }
 
-        // The data from the backend is in the { Items, Colors, Category, 'Sub-Category' } format.
+        // The data from the backend is already in the { Item, Color, Category, SubCategory } format.
         // We just need to map it to our frontend's Product type.
         const products = result.data.map((rawProduct, index) => ({
             productID: `p${String(index + 1).padStart(3, '0')}`,
-            productName: rawProduct.Items || '',
-            colors: rawProduct.Colors || '',
+            productName: rawProduct.Item || '',
+            colors: rawProduct.Color || '',
             category: rawProduct.Category || '',
-            subCategory: rawProduct['Sub-Category'] || 'General', // Default to 'General'
-            lowStockThreshold: Number(rawProduct['Low Stock Threshold']) || 0,
+            subCategory: rawProduct.SubCategory || 'General', // Default to 'General'
         })).filter(p => p.productName && p.category); // Filter out any invalid rows (must have name and category)
 
         return new Response(JSON.stringify(products), {
