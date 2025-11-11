@@ -52,29 +52,12 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
 
     const today = new Date().toISOString().split('T')[0];
 
-    const { filteredProducts, productSelectorLabel } = useMemo(() => {
-        let filtered = products;
-        let label = "Which product are you having an issue with?";
-
+    const productSelectorLabel = useMemo(() => {
         if (damageCategory) {
-            label = `Which ${damageCategory} are you having an issue with?`;
-            switch (damageCategory) {
-                case 'Charging Cases':
-                    filtered = products.filter(p => p.category === 'Power & Charging' && (p.subCategory === 'Charging Cases (Galaxy)' || p.subCategory === 'Charging Cases (iPhone)'));
-                    break;
-                case 'Headphones':
-                    filtered = products.filter(p => p.category === 'Audio Devices' && p.subCategory === 'Headphones');
-                    break;
-                case 'Scooter Luggage':
-                    filtered = products.filter(p => p.category === 'Mobility' && p.subCategory === 'General');
-                    break;
-                case 'Luggage':
-                    filtered = products.filter(p => p.category === 'Luggage' && p.subCategory === 'General');
-                    break;
-            }
+            return `Which ${damageCategory} are you having an issue with?`;
         }
-        return { filteredProducts: filtered, productSelectorLabel: label };
-    }, [damageCategory, products]);
+        return "Which product are you having an issue with?";
+    }, [damageCategory]);
 
     const handleReview = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -243,7 +226,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">{productSelectorLabel} <span className="text-red-500">*</span></label>
                                 <ProductSelector
-                                    products={filteredProducts}
+                                    products={products}
                                     name="product"
                                     value={product}
                                     onChange={(val) => typeof val === 'string' && setProduct(val)}

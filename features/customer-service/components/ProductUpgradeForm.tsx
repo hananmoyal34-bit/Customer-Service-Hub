@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Product } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
@@ -22,9 +23,6 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
     const [formDataToReview, setFormDataToReview] = useState<Record<string, any>>({});
 
     const today = new Date().toISOString().split('T')[0];
-
-    // Filter products to only include charging cases from the "Power & Charging" category.
-    const chargingCaseProducts = products.filter(p => p.category === 'Power & Charging' && (p.subCategory === 'Charging Cases (Galaxy)' || p.subCategory === 'Charging Cases (iPhone)'));
 
     const handleReview = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -75,9 +73,9 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                     <fieldset className="space-y-4">
                         <legend className="text-lg font-semibold text-gray-700 mb-2">Current Product & Purchase Details</legend>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Which charging case do you currently own? <span className="text-red-500">*</span></label>
+                            <label className="block text-sm font-medium text-gray-700">Which product do you currently own? <span className="text-red-500">*</span></label>
                             <ProductSelector
-                                products={chargingCaseProducts}
+                                products={products}
                                 name="currentProduct"
                                 value={currentProduct}
                                 onChange={(val) => typeof val === 'string' && setCurrentProduct(val)}
