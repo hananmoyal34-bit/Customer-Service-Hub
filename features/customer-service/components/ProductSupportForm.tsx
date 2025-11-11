@@ -1,18 +1,16 @@
 
 import React, { useState, useMemo } from 'react';
-import { Product, ProductSupportSubView } from '../../../types';
+import { ProductSupportSubView } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
 import BackButton from '../../../components/BackButton';
 import { submitForm, processFiles } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
-import ProductSelector from './ProductSelector';
 import MultiUploader from './MultiUploader';
 import ReviewModal from './ReviewModal';
 import ProductUpgradeForm from './ProductUpgradeForm';
 
 
 interface ProductSupportFormProps {
-    products: Product[];
     onBack: () => void;
     onSubmission: (msg: string) => void;
 }
@@ -38,7 +36,7 @@ const damageDetails: Record<string, Record<string, string>> = {
 
 const damageCategories = ['Charging Cases', 'Headphones', 'Scooter Luggage', 'Luggage'];
 
-const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBack, onSubmission }) => {
+const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmission }) => {
     const [subView, setSubView] = useState<ProductSupportSubView>('select');
     const [showNoInvoice, setShowNoInvoice] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -121,7 +119,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
     }
 
     if (subView === 'upgrade') {
-        return <ProductUpgradeForm products={products} onBack={() => setSubView('select')} onSubmission={onSubmission} />;
+        return <ProductUpgradeForm onBack={() => setSubView('select')} onSubmission={onSubmission} />;
     }
 
     if (subView === 'damageCategorySelect') {
@@ -225,12 +223,14 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ products, onBac
                             )}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">{productSelectorLabel} <span className="text-red-500">*</span></label>
-                                <ProductSelector
-                                    products={products}
+                                <input
                                     name="product"
+                                    type="text"
                                     value={product}
-                                    onChange={(val) => typeof val === 'string' && setProduct(val)}
+                                    onChange={(e) => setProduct(e.target.value)}
                                     required
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    placeholder="Enter product name (e.g., SuperWidget Model X)"
                                 />
                             </div>
                             <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail (Ticket Notes) <span className="text-red-500">*</span></label><textarea name="ticketNotes" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>

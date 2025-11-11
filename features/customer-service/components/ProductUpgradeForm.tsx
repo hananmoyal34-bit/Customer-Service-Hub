@@ -1,20 +1,17 @@
 
 import React, { useState } from 'react';
-import { Product } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
 import BackButton from '../../../components/BackButton';
 import { submitForm } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
-import ProductSelector from './ProductSelector';
 import ReviewModal from './ReviewModal';
 
 interface ProductUpgradeFormProps {
-    products: Product[];
     onBack: () => void;
     onSubmission: (msg: string) => void;
 }
 
-const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBack, onSubmission }) => {
+const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ onBack, onSubmission }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [currentProduct, setCurrentProduct] = useState('');
@@ -74,12 +71,14 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ products, onBac
                         <legend className="text-lg font-semibold text-gray-700 mb-2">Current Product & Purchase Details</legend>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Which product do you currently own? <span className="text-red-500">*</span></label>
-                            <ProductSelector
-                                products={products}
+                            <input
                                 name="currentProduct"
+                                type="text"
                                 value={currentProduct}
-                                onChange={(val) => typeof val === 'string' && setCurrentProduct(val)}
+                                onChange={(e) => setCurrentProduct(e.target.value)}
                                 required
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Enter the product you own"
                             />
                         </div>
                         <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>

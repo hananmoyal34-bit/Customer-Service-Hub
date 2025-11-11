@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import { Product } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
 import BackButton from '../../../components/BackButton';
 import { submitForm, processSingleFile } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
-import ProductSelector from './ProductSelector';
 import ReviewModal from './ReviewModal';
 
 
 interface WarrantyRegistrationFormProps {
-    products: Product[];
     onBack: () => void;
     onSubmission: (msg: string) => void;
 }
 
-const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ products, onBack, onSubmission }) => {
+const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ onBack, onSubmission }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+    const [selectedProducts, setSelectedProducts] = useState<string>('');
     const [showNoInvoice, setShowNoInvoice] = useState(false);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [formDataToReview, setFormDataToReview] = useState<Record<string, any>>({});
@@ -80,16 +77,18 @@ const WarrantyRegistrationForm: React.FC<WarrantyRegistrationFormProps> = ({ pro
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
                         <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" max={today} /></div>
-                        <div>
+                        <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700">Product(s) Purchased <span className="text-red-500">*</span></label>
-                            <ProductSelector 
-                                products={products}
+                            <input
                                 name="product"
+                                type="text"
                                 value={selectedProducts}
-                                onChange={(val) => Array.isArray(val) && setSelectedProducts(val)}
+                                onChange={(e) => setSelectedProducts(e.target.value)}
                                 required
-                                multiple
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Enter product names, separated by commas"
                             />
+                            <p className="text-xs text-gray-500 mt-1">If registering multiple products, please separate them with a comma.</p>
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label>
