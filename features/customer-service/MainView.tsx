@@ -39,8 +39,8 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
     return (
         <div className="space-y-8">
             <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">How can we help you today?</h2>
-                <p className="mt-2 text-lg text-gray-600">Describe your issue below, or select an option to get started.</p>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Welcome to Your Support Hub</h2>
+                <p className="mt-2 text-lg text-gray-600">Let's get started. Describe your issue below, or select an option.</p>
             </div>
             
             <div className="max-w-2xl mx-auto">
