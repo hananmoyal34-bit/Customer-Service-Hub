@@ -98,7 +98,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
 
     if (subView === 'select') {
         return (
-            <FormWrapper title="Product Support">
+            <FormWrapper title="Product Support & Upgrades">
                  <BackButton onClick={onBack} />
                  <div className="space-y-4">
                      <button type="button" onClick={() => setSubView('damageCategorySelect')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
