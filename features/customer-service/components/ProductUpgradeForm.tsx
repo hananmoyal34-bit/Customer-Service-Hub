@@ -1,10 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import FormWrapper from '../../../components/FormWrapper';
 import BackButton from '../../../components/BackButton';
 import { submitForm } from '../../../services/formSubmissionService';
 import { SpinnerIcon } from '../../../components/icons/SpinnerIcon';
 import ReviewModal from './ReviewModal';
+import { getProducts, ProductCatalog } from '../../../services/productService';
+import { MultiProductSelector, SelectedProduct } from './MultiProductSelector';
 
 interface ProductUpgradeFormProps {
     onBack: () => void;
@@ -14,18 +15,78 @@ interface ProductUpgradeFormProps {
 const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ onBack, onSubmission }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [currentProduct, setCurrentProduct] = useState('');
+    
+    const [productCatalog, setProductCatalog] = useState<ProductCatalog>({});
+    const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
+    const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+    const [productError, setProductError] = useState<string | null>(null);
+    const [hasInteractedWithProducts, setHasInteractedWithProducts] = useState(false);
+
     const [showNoInvoice, setShowNoInvoice] = useState(false);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [formDataToReview, setFormDataToReview] = useState<Record<string, any>>({});
 
     const today = new Date().toISOString().split('T')[0];
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setIsLoadingProducts(true);
+                setProductError(null);
+                const catalog = await getProducts();
+                setProductCatalog(catalog);
+            } catch (err) {
+                console.error("Failed to fetch products:", err);
+                setProductError("Could not load product list. Please try again or contact support.");
+            } finally {
+                setIsLoadingProducts(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    const filteredCatalog = useMemo(() => {
+        const chargerCaseCatalog: ProductCatalog = {};
+        for (const productName in productCatalog) {
+            if (productName.toLowerCase().includes('charger case')) {
+                chargerCaseCatalog[productName] = productCatalog[productName];
+            }
+        }
+        return chargerCaseCatalog;
+    }, [productCatalog]);
+
+    const formatSelectedProductsForSubmission = (products: SelectedProduct[]) => {
+        if (products.length === 0) return "";
+        const product = products[0];
+        const selectionsString = product.selections
+            .map(s => `${s.color} x${s.quantity}`)
+            .join(', ');
+        return `${product.name} (${selectionsString})`;
+    };
+
+     const validationError = useMemo(() => {
+        if (!hasInteractedWithProducts && selectedProducts.length === 0) {
+            return null;
+        }
+        if (selectedProducts.length === 0) {
+            return "Please select the charger case you currently own.";
+        }
+        const productWithoutColor = selectedProducts.find(p => p.selections.length === 0);
+        if (productWithoutColor) {
+            return `Please select at least one color and quantity for "${productWithoutColor.name}".`;
+        }
+        return null;
+    }, [selectedProducts, hasInteractedWithProducts]);
+
+    const isSubmissionDisabled = isSubmitting || !!validationError;
+
     const handleReview = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+        data.currentProduct = formatSelectedProductsForSubmission(selectedProducts);
         setFormDataToReview(data);
         setIsReviewModalOpen(true);
     };
@@ -70,16 +131,28 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ onBack, onSubmi
                     <fieldset className="space-y-4">
                         <legend className="text-lg font-semibold text-gray-700 mb-2">Current Product & Purchase Details</legend>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Which product do you currently own? <span className="text-red-500">*</span></label>
-                            <input
-                                name="currentProduct"
-                                type="text"
-                                value={currentProduct}
-                                onChange={(e) => setCurrentProduct(e.target.value)}
-                                required
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                placeholder="Enter the product you own"
-                            />
+                             <label className="block text-sm font-medium text-gray-700">Which charger case do you currently own? <span className="text-red-500">*</span></label>
+                             {isLoadingProducts && <div className="mt-2 text-gray-500">Loading products...</div>}
+                             {productError && <div className="mt-2 text-red-600">{productError}</div>}
+                             {!isLoadingProducts && !productError && (
+                                <MultiProductSelector
+                                    catalog={filteredCatalog}
+                                    selected={selectedProducts}
+                                    onChange={(newSelection) => {
+                                        if (!hasInteractedWithProducts) {
+                                            setHasInteractedWithProducts(true);
+                                        }
+                                        // Enforce a single product selection
+                                        if (newSelection.length > selectedProducts.length) {
+                                            // User added a new product, only keep the latest one.
+                                            setSelectedProducts(newSelection.slice(-1));
+                                        } else {
+                                            // User removed a product
+                                            setSelectedProducts(newSelection);
+                                        }
+                                    }}
+                                />
+                             )}
                         </div>
                         <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" /></div>
                         <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label><input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm disabled:bg-gray-100" /></div>
@@ -139,8 +212,14 @@ const ProductUpgradeForm: React.FC<ProductUpgradeFormProps> = ({ onBack, onSubmi
                             </label>
                         </div>
                     </div>
+                    
+                    {validationError && (
+                        <div className="p-3 text-sm text-red-700 bg-red-100 rounded-lg text-center" role="alert">
+                            {validationError}
+                        </div>
+                    )}
 
-                    <button type="submit" disabled={isSubmitting} className="w-full flex justify-center bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 disabled:bg-indigo-400">
+                    <button type="submit" disabled={isSubmissionDisabled} className="w-full flex justify-center bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 disabled:bg-indigo-400">
                         {isSubmitting ? <SpinnerIcon /> : 'Review & Submit Request'}
                     </button>
                 </form>
