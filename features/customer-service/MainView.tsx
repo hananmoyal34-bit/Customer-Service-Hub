@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { View } from '../../types';
 import ServiceCard from '../../components/ServiceCard';
@@ -39,8 +40,8 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
     return (
         <div className="space-y-8">
             <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Welcome to Your Support Hub</h2>
-                <p className="mt-2 text-lg text-gray-600">Let's get started. Describe your issue below, or select an option.</p>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">Welcome to Your Support Hub</h2>
+                <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">Let's get started. Describe your issue below, or select an option.</p>
             </div>
             
             <div className="max-w-2xl mx-auto">
@@ -50,7 +51,7 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Ask our AI Assistant (e.g., 'my laptop is broken', 'track my order')"
-                        className="w-full p-4 pl-12 pr-32 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
+                        className="w-full p-4 pl-12 pr-32 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         aria-label="Search help center"
                         disabled={isSearching}
                     />
@@ -65,7 +66,7 @@ const MainView: React.FC<MainViewProps> = ({ setView }) => {
                         {isSearching ? <SpinnerIcon /> : 'Ask AI'}
                     </button>
                 </form>
-                {searchError && <p className="text-center text-red-600 mt-2">{searchError}</p>}
+                {searchError && <p className="text-center text-red-600 mt-2 dark:text-red-400">{searchError}</p>}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">

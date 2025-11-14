@@ -45,7 +45,22 @@ export default async (req, context) => {
         // Using v1beta as it supports responseSchema for JSON mode
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-        const prompt = `A customer has the following query: "${query}". Based on this, which of the following customer service categories is the most appropriate? The categories are: 'productSupport', 'salesInquiry', 'warrantyRegistration', 'general', 'requestCallback', 'shippingInquiry'. Only respond with the single best matching category key.`;
+        const categoryDescriptions = `
+- 'productSupport': For issues with a product you already own, like damage, warranty claims, or requesting an upgrade to a newer model.
+- 'shippingInquiry': For questions about an existing order, such as tracking, delivery issues, or reporting items damaged during shipping.
+- 'requestCallback': If the customer wants to speak to someone on the phone.
+- 'salesInquiry': For customers who want to buy new products, place new orders, or ask about bulk pricing.
+- 'warrantyRegistration': For customers who have just purchased a new product and need to register it for warranty.
+- 'general': A catch-all for any other questions, feedback, or partnership inquiries not covered by the other categories.
+`;
+
+        const prompt = `A customer has the following query: "${query}".
+Analyze the query and determine the best customer service category to route them to based on the descriptions below.
+
+Categories and Descriptions:
+${categoryDescriptions}
+
+Only respond with the single best matching category key.`;
 
         const payload = {
             contents: [{

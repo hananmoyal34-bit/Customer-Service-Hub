@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 
 interface MultiUploaderProps {
@@ -45,7 +46,7 @@ const MultiUploader: React.FC<MultiUploaderProps> = ({ onChange, maxFiles = 4, n
 
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
             <input
                 type="file"
                 ref={fileInputRef}
@@ -55,40 +56,40 @@ const MultiUploader: React.FC<MultiUploaderProps> = ({ onChange, maxFiles = 4, n
                 className="hidden"
                 name={name}
             />
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md dark:border-gray-600">
                 <div className="space-y-1 text-center">
                     <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <div className="flex text-sm text-gray-600 justify-center">
+                    <div className="flex text-sm text-gray-600 dark:text-gray-400 justify-center">
                         <button
                             type="button"
                             onClick={triggerFileInput}
                             disabled={files.length >= maxFiles}
-                            className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 disabled:text-gray-400 disabled:cursor-not-allowed"
+                            className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 disabled:text-gray-400 disabled:cursor-not-allowed dark:bg-transparent dark:text-indigo-400 dark:disabled:text-gray-500"
                         >
                             <span>Add files</span>
                         </button>
                     </div>
-                    {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
+                    {description && <p className="text-xs text-gray-500 mt-1 dark:text-gray-400">{description}</p>}
                 </div>
             </div>
-            {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
+            {error && <p className="text-sm text-red-600 mt-2 dark:text-red-400">{error}</p>}
             
             {files.length > 0 && (
                 <div className="mt-4 space-y-2">
-                    <p className="text-sm font-medium text-gray-700">Selected files ({files.length}/{maxFiles}):</p>
-                    <ul className="divide-y divide-gray-200 border rounded-md" role="list">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Selected files ({files.length}/{maxFiles}):</p>
+                    <ul className="divide-y divide-gray-200 border rounded-md dark:divide-gray-700 dark:border-gray-700" role="list">
                         {files.map((file, index) => (
                             <li key={index} className="px-3 py-2 flex items-center justify-between text-sm">
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-gray-800 truncate">{file.name}</p>
-                                    <p className="text-gray-500">({(file.size / 1024).toFixed(2)} KB)</p>
+                                    <p className="font-medium text-gray-800 truncate dark:text-gray-200">{file.name}</p>
+                                    <p className="text-gray-500 dark:text-gray-400">({(file.size / 1024).toFixed(2)} KB)</p>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveFile(index)}
-                                    className="ml-4 p-1 text-red-600 hover:text-red-800 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="ml-4 p-1 text-red-600 hover:text-red-800 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/50"
                                     aria-label={`Remove ${file.name}`}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

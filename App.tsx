@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans dark:bg-gray-900 dark:text-gray-200">
       <Header />
       <main className="py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
         <CustomerServicePage />

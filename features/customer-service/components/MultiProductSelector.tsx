@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCatalog } from '../../../services/productService';
 
@@ -22,10 +23,10 @@ const ProductSelectionSummary: React.FC<{ product: SelectedProduct; onEdit: () =
     const colorCount = product.selections.length;
 
     return (
-        <div className="p-3 bg-white rounded-md border border-indigo-200 shadow-sm flex items-center justify-between gap-2 flex-wrap">
+        <div className="p-3 bg-white rounded-md border border-indigo-200 shadow-sm flex items-center justify-between gap-2 flex-wrap dark:bg-gray-700 dark:border-indigo-900">
             <div>
-                <h5 className="font-semibold text-gray-900 text-base">{product.name}</h5>
-                <p className="text-xs text-gray-600 mt-1">
+                <h5 className="font-semibold text-gray-900 text-base dark:text-gray-100">{product.name}</h5>
+                <p className="text-xs text-gray-600 mt-1 dark:text-gray-400">
                     {colorCount > 0 ? `${colorCount} color(s) selected, ${totalQuantity} total item(s)` : 'No colors selected'}
                 </p>
             </div>
@@ -33,14 +34,14 @@ const ProductSelectionSummary: React.FC<{ product: SelectedProduct; onEdit: () =
                  <button
                     type="button"
                     onClick={onEdit}
-                    className="px-3 py-1 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="px-3 py-1 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-indigo-300 dark:bg-indigo-900/50 dark:hover:bg-indigo-900"
                 >
                     Edit
                 </button>
                  <button
                     type="button"
                     onClick={onRemove}
-                    className="p-1.5 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="p-1.5 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-gray-500 dark:hover:text-red-400 dark:hover:bg-red-900/50"
                     aria-label={`Remove ${product.name}`}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -139,8 +140,8 @@ export const MultiProductSelector: React.FC<MultiProductSelectorProps> = ({ cata
         <div className="space-y-4">
             {selected.length > 0 && (
                 <div className="space-y-3">
-                    <h4 className="text-sm font-semibold text-gray-800">Selected Products:</h4>
-                    <div className="space-y-3 rounded-lg border border-gray-200 p-2 sm:p-3 bg-gray-50">
+                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Selected Products:</h4>
+                    <div className="space-y-3 rounded-lg border border-gray-200 p-2 sm:p-3 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50">
                         {selected.map(product => {
                             const isExpanded = expandedProducts.has(product.name);
                             if (!isExpanded) {
@@ -156,13 +157,13 @@ export const MultiProductSelector: React.FC<MultiProductSelectorProps> = ({ cata
 
                              const availableColors = catalog[product.name] || [];
                              return (
-                            <div key={product.name} className="p-3 bg-white rounded-md border-2 border-indigo-400 shadow-lg">
+                            <div key={product.name} className="p-3 bg-white rounded-md border-2 border-indigo-400 shadow-lg dark:bg-gray-800 dark:border-indigo-500">
                                 <div className="flex justify-between items-start gap-2">
-                                    <h5 className="font-semibold text-gray-900 pt-1 text-base">{product.name}</h5>
+                                    <h5 className="font-semibold text-gray-900 pt-1 text-base dark:text-gray-100">{product.name}</h5>
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveProduct(product.name)}
-                                        className="p-1 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        className="p-1 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-gray-500 dark:hover:text-red-400 dark:hover:bg-red-900/50"
                                         aria-label={`Remove ${product.name}`}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -170,15 +171,15 @@ export const MultiProductSelector: React.FC<MultiProductSelectorProps> = ({ cata
                                         </svg>
                                     </button>
                                 </div>
-                                <div className="mt-3 pl-1 border-t pt-3 space-y-3">
-                                     <p className="text-sm font-medium text-gray-600">Select colors & quantity:</p>
+                                <div className="mt-3 pl-1 border-t pt-3 space-y-3 dark:border-gray-700">
+                                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Select colors & quantity:</p>
                                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                         {availableColors.map(color => {
                                             const selection = product.selections.find(s => s.color === color);
                                             const isChecked = !!selection;
                                             const pillClasses = isChecked 
                                                 ? 'bg-indigo-600 text-white border-indigo-600'
-                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50 hover:border-indigo-400';
+                                                : 'bg-white text-gray-700 border-gray-300 hover:bg-indigo-50 hover:border-indigo-400 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-600 dark:hover:border-indigo-600';
 
                                             return (
                                                 <div key={color} className="space-y-2">
@@ -196,14 +197,14 @@ export const MultiProductSelector: React.FC<MultiProductSelectorProps> = ({ cata
                                                     </button>
                                                     {isChecked && (
                                                          <div className="flex items-center gap-2 pl-1">
-                                                            <label htmlFor={`${product.name}-${color}-qty`} className="text-sm text-gray-600 font-medium">Qty:</label>
+                                                            <label htmlFor={`${product.name}-${color}-qty`} className="text-sm text-gray-600 font-medium dark:text-gray-400">Qty:</label>
                                                             <input
                                                                 id={`${product.name}-${color}-qty`}
                                                                 type="number"
                                                                 min="1"
                                                                 value={selection.quantity}
                                                                 onChange={(e) => handleQuantityChange(product.name, color, e.target.value)}
-                                                                className="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                                                className="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                                                 aria-label={`Quantity for ${product.name} ${color}`}
                                                             />
                                                          </div>
@@ -229,39 +230,39 @@ export const MultiProductSelector: React.FC<MultiProductSelectorProps> = ({ cata
             )}
             
             <div>
-                 <label htmlFor="product-search" className="block text-sm font-medium text-gray-700">Find and Select Products:</label>
+                 <label htmlFor="product-search" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Find and Select Products:</label>
                  <input
                     id="product-search"
                     type="search"
                     placeholder="Search for a product..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 />
             </div>
             
-            <div className="mt-2 p-3 border border-gray-300 rounded-md max-h-60 overflow-y-auto bg-white">
+            <div className="mt-2 p-3 border border-gray-300 rounded-md max-h-60 overflow-y-auto bg-white dark:bg-gray-700 dark:border-gray-600">
                 {filteredProductNames.length > 0 ? (
                     <div className="space-y-1">
                         {filteredProductNames.map(productName => (
-                            <div key={productName} className="flex items-center p-2 rounded-md hover:bg-gray-50">
+                            <div key={productName} className="flex items-center p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <button
                                     type="button"
                                     onClick={() => handleAddProduct(productName)}
                                     className="flex items-center space-x-3 cursor-pointer w-full text-left"
                                 >
-                                    <div className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 flex items-center justify-center border">
+                                    <div className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 flex items-center justify-center border dark:border-gray-500">
                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm text-gray-800">{productName}</span>
+                                    <span className="text-sm text-gray-800 dark:text-gray-200">{productName}</span>
                                 </button>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-500 text-center py-4">
+                    <p className="text-sm text-gray-500 text-center py-4 dark:text-gray-400">
                         {allProductNames.length > selected.length ? 'No products found matching your search.' : 'All products have been selected.'}
                     </p>
                 )}

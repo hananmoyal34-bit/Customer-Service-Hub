@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo } from 'react';
 import { ProductSupportSubView } from '../../../types';
 import FormWrapper from '../../../components/FormWrapper';
@@ -101,17 +102,17 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
             <FormWrapper title="Product Support & Upgrades">
                  <BackButton onClick={onBack} />
                  <div className="space-y-4">
-                     <button type="button" onClick={() => setSubView('damageCategorySelect')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <p className="font-semibold text-gray-800">My product is damaged or not working.</p>
-                        <p className="text-sm text-gray-600">Proceed to file a report for a defective or damaged item.</p>
+                     <button type="button" onClick={() => setSubView('damageCategorySelect')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">My product is damaged or not working.</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Proceed to file a report for a defective or damaged item.</p>
                      </button>
-                     <button type="button" onClick={() => setSubView('upgrade')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <p className="font-semibold text-gray-800">I want to upgrade my Charging Case.</p>
-                        <p className="text-sm text-gray-600">Request information about upgrading your charging case to a newer model.</p>
+                     <button type="button" onClick={() => setSubView('upgrade')} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">I want to upgrade my Charging Case.</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Request information about upgrading your charging case to a newer model.</p>
                      </button>
-                      <button type="button" onClick={onBack} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <p className="font-semibold text-gray-800">I need help with something else related to my product.</p>
-                         <p className="text-sm text-gray-600">Please use the 'General Questions' form for other inquiries.</p>
+                      <button type="button" onClick={onBack} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">I need help with something else related to my product.</p>
+                         <p className="text-sm text-gray-600 dark:text-gray-400">Please use the 'General Questions' form for other inquiries.</p>
                      </button>
                  </div>
             </FormWrapper>
@@ -126,14 +127,14 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
         return (
             <FormWrapper title="Select Product Category">
                 <BackButton onClick={() => setSubView('select')} />
-                <p className="text-gray-600 mb-6">What type of product are you having an issue with?</p>
+                <p className="text-gray-600 mb-6 dark:text-gray-300">What type of product are you having an issue with?</p>
                 <div className="space-y-3">
                     {damageCategories.map(category => (
-                        <button key={category} type="button" onClick={() => { setDamageCategory(category); setSubView('damageReasonSelect'); }} className="w-full text-left p-4 border rounded-md hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-gray-700">
+                        <button key={category} type="button" onClick={() => { setDamageCategory(category); setSubView('damageReasonSelect'); }} className="w-full text-left p-4 border rounded-md hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-gray-700 dark:border-gray-700 dark:hover:bg-indigo-900/50 dark:text-gray-300">
                             {category}
                         </button>
                     ))}
-                    <button type="button" onClick={() => { setDamageCategory(null); setDamageReason(null); setSubView('form'); }} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-gray-700">
+                    <button type="button" onClick={() => { setDamageCategory(null); setDamageReason(null); setSubView('form'); }} className="w-full text-left p-4 border rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-gray-700 dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-300">
                         Something Else
                     </button>
                 </div>
@@ -146,18 +147,18 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
         return (
             <FormWrapper title={`Issue with your ${damageCategory}`}>
                 <BackButton onClick={() => setSubView('damageCategorySelect')} />
-                <p className="text-gray-600 mb-6">Please select the option that best describes the issue.</p>
+                <p className="text-gray-600 mb-6 dark:text-gray-300">Please select the option that best describes the issue.</p>
                 <div className="space-y-6">
-                    <div className="p-5 border-2 border-gray-200 rounded-lg hover:border-indigo-400 transition-colors">
-                        <h3 className="font-bold text-lg text-gray-900">Broken</h3>
-                        <p className="text-gray-700 mt-1">{details.Broken}</p>
+                    <div className="p-5 border-2 border-gray-200 rounded-lg hover:border-indigo-400 transition-colors dark:border-gray-700 dark:hover:border-indigo-500">
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">Broken</h3>
+                        <p className="text-gray-700 mt-1 dark:text-gray-300">{details.Broken}</p>
                         <button type="button" onClick={() => { setDamageReason('Broken'); setSubView('form'); }} className="mt-4 bg-indigo-600 text-white font-semibold py-2 px-5 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             This sounds right
                         </button>
                     </div>
-                     <div className="p-5 border-2 border-gray-200 rounded-lg hover:border-indigo-400 transition-colors">
-                        <h3 className="font-bold text-lg text-gray-900">Damaged</h3>
-                        <p className="text-gray-700 mt-1">{details.Damaged}</p>
+                     <div className="p-5 border-2 border-gray-200 rounded-lg hover:border-indigo-400 transition-colors dark:border-gray-700 dark:hover:border-indigo-500">
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">Damaged</h3>
+                        <p className="text-gray-700 mt-1 dark:text-gray-300">{details.Damaged}</p>
                         <button type="button" onClick={() => { setDamageReason('Damaged'); setSubView('form'); }} className="mt-4 bg-indigo-600 text-white font-semibold py-2 px-5 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                            This sounds right
                         </button>
@@ -184,56 +185,69 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
                 >
                     <BackButton onClick={handleBackFromForm} />
                     <form onSubmit={handleReview} className="space-y-8">
-                        {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">{error}</div>}
+                        {error && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-900/50 dark:text-red-300" role="alert">{error}</div>}
                         <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <legend className="text-lg font-semibold text-gray-700 mb-2 col-span-full">Part 1: Your Information</legend>
-                            <div><label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email Address <span className="text-red-500">*</span></label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
+                            <legend className="text-lg font-semibold text-gray-700 mb-2 col-span-full dark:text-gray-300">Part 1: Your Information</legend>
+                            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name <span className="text-red-500">*</span></label><input name="firstName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name <span className="text-red-500">*</span></label><input name="lastName" type="text" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
+                            <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address <span className="text-red-500">*</span></label><input name="email" type="email" required className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
                         </fieldset>
                         
                         <fieldset className="space-y-4">
-                            <legend className="text-lg font-semibold text-gray-700 mb-2">Part 2: Purchase Details</legend>
-                            <div><label className="block text-sm font-medium text-gray-700">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label><input name="invoiceNumber" type="text" required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100" /></div>
-                            <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline">Don't have your invoice number?</button>
+                            <legend className="text-lg font-semibold text-gray-700 mb-2 dark:text-gray-300">Part 2: Purchase Details</legend>
+                            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Store Name <span className="text-red-500">*</span></label><input name="storeName" type="text" required placeholder="e.g., Main Street Store" className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
+                            <div>
+                                <div className="flex items-center">
+                                    <label htmlFor="invoiceNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Order / Invoice Number {!showNoInvoice && <span className="text-red-500">*</span>}</label>
+                                    <div className="group relative flex items-center ml-2">
+                                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="absolute bottom-full mb-2 w-max -translate-x-1/2 left-1/2 invisible group-hover:visible bg-gray-700 text-white text-xs rounded py-1 px-2 z-10 dark:bg-gray-600">
+                                            Only numbers are allowed.
+                                        </span>
+                                    </div>
+                                </div>
+                                <input id="invoiceNumber" name="invoiceNumber" type="tel" pattern="[0-9]*" onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, ''); }} title="Please enter only numbers for the invoice number." required={!showNoInvoice} disabled={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:disabled:bg-gray-600" />
+                            </div>
+                            <button type="button" onClick={() => setShowNoInvoice(!showNoInvoice)} className="text-sm text-indigo-600 hover:underline dark:text-indigo-400">Don't have your invoice number?</button>
                             {showNoInvoice && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50">
-                                    <div><label className="block text-sm font-medium text-gray-700">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" max={today} /></div>
-                                    <div><label className="block text-sm font-medium text-gray-700">Store of Purchase <span className="text-red-500">*</span></label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md" /></div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border rounded-md bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600">
+                                    <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Last 4 Digits of Card <span className="text-red-500">*</span></label><input name="last4Digits" type="text" pattern="\d{4}" maxLength={4} title="Four digits" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Purchase Amount ($) <span className="text-red-500">*</span></label><input name="purchaseAmount" type="number" step="0.01" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date of Purchase <span className="text-red-500">*</span></label><input name="purchaseDate" type="date" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" max={today} /></div>
+                                    <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Store of Purchase <span className="text-red-500">*</span></label><input name="storeOfPurchase" type="text" placeholder="e.g., Acme.com, Amazon" required={showNoInvoice} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" /></div>
                                 </div>
                             )}
                         </fieldset>
                         
                         <fieldset className="space-y-4">
-                            <legend className="text-lg font-semibold text-gray-700 mb-2">Part 3: Issue Details</legend>
+                            <legend className="text-lg font-semibold text-gray-700 mb-2 dark:text-gray-300">Part 3: Issue Details</legend>
                              {damageCategory && (
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Product Category</label>
-                                        <p className="mt-1 block w-full p-3 border border-gray-200 rounded-md bg-gray-100 text-gray-800">{damageCategory}</p>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Product Category</label>
+                                        <p className="mt-1 block w-full p-3 border border-gray-200 rounded-md bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">{damageCategory}</p>
                                     </div>
                                      <div>
-                                        <label className="block text-sm font-medium text-gray-700">Type of Issue</label>
-                                        <p className="mt-1 block w-full p-3 border border-gray-200 rounded-md bg-gray-100 text-gray-800">{damageReason}</p>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Type of Issue</label>
+                                        <p className="mt-1 block w-full p-3 border border-gray-200 rounded-md bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">{damageReason}</p>
                                     </div>
                                 </div>
                             )}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">{productSelectorLabel} <span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{productSelectorLabel} <span className="text-red-500">*</span></label>
                                 <input
                                     name="product"
                                     type="text"
                                     value={product}
                                     onChange={(e) => setProduct(e.target.value)}
                                     required
-                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                     placeholder="Enter product name (e.g., SuperWidget Model X)"
                                 />
                             </div>
-                            <div><label className="block text-sm font-medium text-gray-700">Please describe the issue in detail (Ticket Notes) <span className="text-red-500">*</span></label><textarea name="ticketNotes" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"></textarea></div>
+                            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Please describe the issue in detail (Ticket Notes) <span className="text-red-500">*</span></label><textarea name="ticketNotes" required rows={5} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"></textarea></div>
                             <MultiUploader 
                                 name="damagePhotos"
                                 label="Upload Photos of the Damage"
@@ -243,7 +257,7 @@ const ProductSupportForm: React.FC<ProductSupportFormProps> = ({ onBack, onSubmi
                             />
                         </fieldset>
 
-                        <div className="bg-gray-100 p-4 rounded-md text-sm text-gray-600 border border-gray-200">
+                        <div className="bg-gray-100 p-4 rounded-md text-sm text-gray-600 border border-gray-200 dark:bg-gray-900/50 dark:text-gray-400 dark:border-gray-700">
                             <p><b>Please note:</b> Replacements are subject to our warranty and return policies. Our team will confirm all details and any potential costs with you before proceeding.</p>
                         </div>
                         
