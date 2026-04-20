@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .clip-oval {
+    clip-path: ellipse(50% 50% at 50% 50%);
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: #fafafa;
+  color: #171717;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+html.dark body {
+  background-color: #0a0a0a;
+  color: #f5f5f5;
+}
+
+/* Wavy background for the hero section */
+.hero-wavy-bg {
+  background-color: #0a0a0a;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(180, 138, 71, 0.03) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(180, 138, 71, 0.04) 0%, transparent 30%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-wavy-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,200 C300,100 600,300 900,200 C1200,100 1500,300 1800,200 L1800,0 L0,0 Z' fill='none' stroke='rgba(180,138,71,0.05)' stroke-width='1'/%3E%3Cpath d='M0,300 C400,200 800,400 1200,300 C1600,200 2000,400 2400,300 L2400,0 L0,0 Z' fill='none' stroke='rgba(180,138,71,0.03)' stroke-width='2'/%3E%3Cpath d='M0,450 C250,350 500,550 750,450 C1000,350 1250,550 1500,450 C1750,350 2000,550 2250,450 L2250,0 L0,0 Z' fill='none' stroke='rgba(180,138,71,0.02)' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Reskin default indigo utilities from standard templates */
+.bg-indigo-600 { background-color: #b48a47 !important; }
+.hover\:bg-indigo-700:hover { background-color: #d4a359 !important; }
+.text-indigo-600 { color: #b48a47 !important; }
+.text-indigo-700 { color: #d4a359 !important; }
+.border-indigo-500 { border-color: #b48a47 !important; }
+.focus\:ring-indigo-500:focus { --tw-ring-color: #b48a47 !important; }
