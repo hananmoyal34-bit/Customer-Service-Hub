@@ -12,7 +12,7 @@ const App: React.FC = () => {
       if (savedTheme) {
         return savedTheme === 'dark';
       }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return true; // Default to dark mode unconditionally if no override
     }
     return true;
   });

@@ -22,15 +22,6 @@ const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, setView, currentVi
                     </div>
                     <span className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white tracking-tight truncate group-hover:opacity-80 transition-opacity">Customer Service Hub</span>
                 </button>
-                
-                <nav className="flex items-center gap-6 flex-shrink-0">
-                    <button 
-                        onClick={() => setView && setView('faq')}
-                        className={`text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-amber rounded-md px-2 py-1 ${currentView === 'faq' ? 'text-luxury-amber dark:text-luxury-amber' : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'}`}
-                    >
-                        FAQ
-                    </button>
-                </nav>
 
                 <div className="flex items-center gap-4">
                     <div className="group relative">

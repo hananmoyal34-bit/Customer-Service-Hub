@@ -8,7 +8,6 @@ import WarrantyRegistrationForm from './components/WarrantyRegistrationForm';
 import GeneralQuestionsForm from './components/GeneralQuestionsForm';
 import RequestCallbackForm from './components/RequestCallbackForm';
 import MainView from './MainView';
-import FAQPage from './FAQPage';
 
 interface CustomerServicePageProps {
   view: View;
@@ -46,8 +45,6 @@ const CustomerServicePage: React.FC<CustomerServicePageProps> = ({ view, setView
             return <GeneralQuestionsForm onBack={() => setView('main')} onSubmission={handleSubmission} />;
         case 'requestCallback':
             return <RequestCallbackForm onBack={() => setView('main')} onSubmission={handleSubmission} />;
-        case 'faq':
-            return <FAQPage onBack={() => setView('main')} />;
         case 'main':
         default:
             return <MainView setView={setView} />;
